@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #trap crtl^c
-trap ctrl_c INT
-function crtl_c(){
-	echo "Exiting.. Cleaining up Firefox and Wireshark"
-}
+#trap ctrl_c INT
+#function crtl_c(){
+#	echo "Exiting.. Cleaning up Firefox and Wireshark"
+#}
 
 datetime=`date +"%d.%m.%y::%H:%M"`
 $wireshark
