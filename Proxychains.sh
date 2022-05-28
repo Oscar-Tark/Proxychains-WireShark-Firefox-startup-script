@@ -14,7 +14,7 @@ $wiresharkdevice
 $logfile
 
 #Create log file
-logfile="/var/log/proxychainswireshark${datetime}.capture"
+logfile="/var/log/proxychains${datetime}.capture"
 #If file exists add an index
 for i in {0..4}
 do
@@ -22,27 +22,37 @@ do
 		sudo touch "${logfile}"
 		break
 	else
-		logfile="/var/log/proxychainswireshark${i}.${datetime}.capture"
+		logfile="/var/log/proxychains${i}.${datetime}.capture"
 	fi
 done
 
 if [ ! -f "$logfile" ]; then
         echo "Log file does not exist. Creating.."
-        sudo touch "/var/log/proxychainswireshark${datetime}.capture"
+        sudo touch "/var/log/proxychains${datetime}.capture"
 fi
 
 #Select wireshark device
-echo "Device Selection for wireshark:"
-sudo wireshark -D
-echo "Please insert the index or name of a device:"
-read devname
+echo "Would you like to use wireshark or tcpdump? (wireshark/tcpdump)"
+read wiresharktcpdump
 
-#Set commands
-wireshark="sudo wireshark -i ${devname} -k -w ${logfile}"
-proxychains="proxychains firefox -p -no-remote"
+if [ $wiresharktcpdump == "wireshark" ]; then
+    echo "Device Selection for wireshark:"
+    sudo wireshark -D
+    echo "Please insert the index or name of a device:"
+    read devname
+    #Set commands
+    wireshark="sudo wireshark -i ${devname} -k -w ${logfile}"
+    $wireshark &
+    echo "Started wireshark (log@${logfile})"
+elif [ $wiresharktcpdump == "tcpdump" ]; then
+    echo "Started tcpdump (log@${logfile})"
+    tcpdump="sudo tcpdump -vv > ${logfile}"
+    $tcpdump &
+else
+    exit 1
+fi
 
-#Start Wireshark and proxychains
-echo "Starting Wireshark (Log@${logfile})"
-$wireshark &
+#Start proxychains firefox
+proxychains="proxychains4 firefox -p -no-remote"
 echo "Starting Firefox with proxychains"
 $proxychains &
