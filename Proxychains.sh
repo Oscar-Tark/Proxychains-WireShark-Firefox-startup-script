@@ -26,11 +26,6 @@ do
 	fi
 done
 
-if [ ! -f "$logfile" ]; then
-        echo "Log file does not exist. Creating.."
-        sudo touch "/var/log/proxychains${datetime}.capture"
-fi
-
 #Select wireshark device
 echo "Would you like to use wireshark or tcpdump? (wireshark/tcpdump)"
 read wiresharktcpdump
