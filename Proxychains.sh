@@ -51,3 +51,4 @@ fi
 proxychains="proxychains4 firefox -p -no-remote"
 echo "Starting Firefox with proxychains"
 $proxychains &
+$SHELL
